@@ -13,13 +13,16 @@ def handle(url):
     changedict = dict([tuple(x.replace('\"','').split("=")) for x in change.split(';')][:-1])
     ret = []
     for t in text:
-        ta = [x.replace("</td>","") for x in t[4:-5].split('<td>') if x]
-        idx0 = ta[0].find("\":\"+")
-        idx1 = ta[0].find(")</SCRIPT>")
-        idx2 = ta[0].find("<SCRIPT")
-        port_orig = ta[0][idx0+4:idx1].replace("+","")
-        port = ''.join([changedict[p] for p in port_orig])
-        ret.append(([ta[0][:idx2],port,ta[1],ta[2],ta[3]]))
+        try:
+            ta = [x.replace("</td>","") for x in t[4:-5].split('<td>') if x]
+            idx0 = ta[0].find("\":\"+")
+            idx1 = ta[0].find(")</SCRIPT>")
+            idx2 = ta[0].find("<SCRIPT")
+            port_orig = ta[0][idx0+4:idx1].replace("+","")
+            port = ''.join([changedict[p] for p in port_orig])
+            ret.append(([ta[0][:idx2],port,ta[1],ta[2],ta[3]]))
+        except:
+            continue
     return ret
 
 res = []
