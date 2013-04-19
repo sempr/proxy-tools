@@ -9,25 +9,24 @@ import httplib
 import threading
 import Queue
 import sys
+import requests
 
 socket.setdefaulttimeout(1)
 
 #def check(host, port, url='http://www.baidu.com/', keyword='030173'):
 def check(host, port, url='http://err.tmall.com/error1.html', keyword='B2-20110446'):
+    proxies = {'http': "%s:%s" % (str(host), str(port))}
     try:
-        conn = httplib.HTTPConnection(host, int(port))  
-        conn.putrequest('GET', url)  
-        conn.endheaders()
-        resp = conn.getresponse()  
-        if resp.status == 200:  
-            data = resp.read()
-            if data.index(keyword) != -1:
-                return True
-            return False
-        else:
-            return False
+        r = requests.get(url, proxies=proxies, timeout=1)
     except:
+        print 'Error: %s' % str(proxies)
         return False
+    print 'Right: %s' % str(proxies)
+    text = r.text
+    if text.find(keyword) != -1:
+        return True
+    return False
+
 
 class CheckThread(threading.Thread):
     def __init__(self,no,q, r):
