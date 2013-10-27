@@ -15,7 +15,7 @@ socket.setdefaulttimeout(1)
 
 #def check(host, port, url='http://www.baidu.com/', keyword='030173'):
 def check(host, port, url='http://err.tmall.com/error1.html', keyword='B2-20110446'):
-    proxies = {'http': "%s:%s" % (str(host), str(port))}
+    proxies = {'http': "http://%s:%s" % (str(host), str(port))}
     try:
         r = requests.get(url, proxies=proxies, timeout=1)
     except:
