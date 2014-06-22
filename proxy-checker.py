@@ -11,13 +11,15 @@ import Queue
 import sys
 import requests
 
-socket.setdefaulttimeout(1)
+TIMEOUT = 5
+
+socket.setdefaulttimeout(TIMEOUT)
 
 #def check(host, port, url='http://www.baidu.com/', keyword='030173'):
 def check(host, port, url='http://err.tmall.com/error1.html', keyword='B2-20110446'):
     proxies = {'http': "http://%s:%s" % (str(host), str(port))}
     try:
-        r = requests.get(url, proxies=proxies, timeout=1)
+        r = requests.get(url, proxies=proxies, timeout=TIMEOUT)
     except:
         print 'Error: %s' % str(proxies)
         return False
@@ -47,7 +49,7 @@ class CheckThread(threading.Thread):
             tstart = time.time()
             ret = check(proxy[0],proxy[1])
             tuse = time.time() - tstart
-            if (ret):
+            if (ret) and tuse < TIMEOUT * 2:
                 proxy.append(tuse)
                 self.r.append(proxy)
 
